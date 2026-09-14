@@ -1,0 +1,15 @@
+{
+  "name": "comptallie-marchand-de-biens-plugins",
+  "description": "Plugin Comptallie Marchand de biens — emballage (skill + connexion MCP) de la suite marchand de biens (projection de rénovation par IA) pour Claude.ai. Une suite = un repo plugin distinct : cf. Comptallie_MCP/CLAUDE.md section 6bis.",
+  "owner": {
+    "name": "Hugo Esposito Farese",
+    "email": "hugo.esposito.farese.pro@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "comptallie-marchand-de-biens",
+      "source": "./adapters/claude_plugin",
+      "description": "Projection de rénovation (/projection-renovation) — emballage (skill + connexion au serveur MCP distant existant) sans logique propre, cf. Comptallie_MCP/CLAUDE.md section 5"
+    }
+  ]
+}
