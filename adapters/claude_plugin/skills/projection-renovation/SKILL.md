@@ -6,18 +6,19 @@ description: Assistant Projection de rénovation de la suite marchand de biens �
 <!--
 COQUILLE PUBLIQUE — ce fichier finit dans un repo public (requis par le
 mécanisme "Add from repository" de Claude.ai, cf. Comptallie_MCP/CLAUDE.md
-section 5). Aucun détail d'implémentation (fal.ai, Notion, budget partagé)
-en dur ici — la logique complète (garde-fou budgétaire, prompt de
-génération) vit exclusivement côté serveur privé.
+section 5). Aucun détail d'implémentation (fal.ai) en dur ici — la logique
+complète (prompt de génération) vit exclusivement côté serveur privé.
 
 Copie adaptée de core/skills/marchand_de_biens/projection-renovation.md
 (source de vérité privée, comportement complet). Synchronisation MANUELLE
 pour l'instant.
 
 RUPTURE DE MODÈLE ÉCONOMIQUE : contrairement aux autres suites Comptallie,
-celle-ci déclenche une inférence tierce payante à chaque génération, sur un
-budget partagé entre tous les clients — d'où le refus explicite possible
-(`budget_suffisant` faux) à présenter simplement, jamais comme un bug.
+celle-ci déclenche une inférence tierce payante à chaque génération — PAS
+de garde-fou budgétaire dans cet MVP (décision produit explicite, cf.
+Comptallie_MCP/CLAUDE.md section dédiée "Marchand de biens") : n'appelle
+`generer_projection_renovation` qu'une fois les trois éléments réellement
+réunis et confirmés, jamais pour un simple test.
 
 AUCUNE FICHE ENTITÉ, AUCUN ONBOARDING RELATIONNEL pour cette suite — ne
 demande jamais d'informations générales sur l'activité du client.
@@ -49,18 +50,14 @@ vague sur une rénovation :
 ## Séquence
 
 1. **Dès que les trois éléments sont réunis**, appelle
-   `generer_projection_renovation` avec un identifiant client simple et les
-   trois éléments.
+   `generer_projection_renovation` avec les trois éléments. **Chaque appel
+   déclenche une génération fal.ai payante, sans garde-fou dans cet MVP** —
+   ne l'appelle jamais par curiosité ou pour tester.
 
 2. **Si `donnees_manquantes` est retourné** : redemande précisément
    l'élément manquant — jamais une question générique.
 
-3. **Si `budget_suffisant` est faux** : explique simplement que le crédit
-   de génération disponible est actuellement trop bas et qu'il faut le
-   vérifier/recharger avant de réessayer — jamais comme une erreur
-   technique ou un bug de ta part.
-
-4. **Si `generation_effectuee` est vrai** : présente l'image générée en
+3. **Si `generation_effectuee` est vrai** : présente l'image générée en
    étant **honnête sur la limite du placement** — c'est une **première
    projection à valider visuellement**, le placement précis des objets
    reste **expérimental** (le système génère l'image à partir des photos et
@@ -68,7 +65,7 @@ vague sur une rénovation :
    une nouvelle itération peut améliorer le résultat si besoin. **Ne promets
    jamais une précision géométrique que le système ne garantit pas.**
 
-5. **Si `generation_effectuee` est faux avec une `erreur`** : explique
+4. **Si `generation_effectuee` est faux avec une `erreur`** : explique
    simplement que la génération n'a pas abouti cette fois et propose de
    réessayer — jamais un message technique brut.
 
