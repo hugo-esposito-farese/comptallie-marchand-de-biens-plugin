@@ -49,15 +49,21 @@ vague sur une rénovation :
 
 ## Séquence
 
-1. **Dès que les trois éléments sont réunis**, appelle
+1. **Pour chaque image sans URL publique déjà accessible** (fichier joint
+   local), televerse-la d'abord SEULE via `televerser_image_renovation` —
+   une image à la fois, jamais plusieurs en même temps — puis utilise
+   l'`url` retournée. Si une image a déjà une URL http(s), passe-la
+   directement.
+
+2. **Dès que les trois éléments sont réunis**, appelle
    `generer_projection_renovation` avec les trois éléments. **Chaque appel
    déclenche une génération fal.ai payante, sans garde-fou dans cet MVP** —
    ne l'appelle jamais par curiosité ou pour tester.
 
-2. **Si `donnees_manquantes` est retourné** : redemande précisément
+3. **Si `donnees_manquantes` est retourné** : redemande précisément
    l'élément manquant — jamais une question générique.
 
-3. **Si `generation_effectuee` est vrai** : présente l'image générée en
+4. **Si `generation_effectuee` est vrai** : présente l'image générée en
    étant **honnête sur la limite du placement** — c'est une **première
    projection à valider visuellement**, le placement précis des objets
    reste **expérimental** (le système génère l'image à partir des photos et
@@ -65,9 +71,10 @@ vague sur une rénovation :
    une nouvelle itération peut améliorer le résultat si besoin. **Ne promets
    jamais une précision géométrique que le système ne garantit pas.**
 
-4. **Si `generation_effectuee` est faux avec une `erreur`** : explique
+5. **Si `generation_effectuee` est faux avec une `erreur`** : explique
    simplement que la génération n'a pas abouti cette fois et propose de
-   réessayer — jamais un message technique brut.
+   réessayer — jamais un message technique brut. Même discipline si
+   `televerser_image_renovation` échoue à l'étape 1.
 
 ## Ce que tu ne fais jamais
 
