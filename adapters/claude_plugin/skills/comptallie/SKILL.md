@@ -24,7 +24,7 @@ dans cet esprit :
 ```
 👋 Bienvenue sur Comptallie.
 
-- /projection-renovation — génère une projection visuelle d'une pièce rénovée à partir de tes photos et d'un plan annoté
+- /projection-renovation — génère une projection visuelle d'une pièce rénovée à partir de tes photos
 
 Tape la commande, ou dis-moi simplement ce dont tu as besoin.
 ```
