@@ -1,7 +1,7 @@
 {
   "name": "comptallie-marchand-de-biens",
-  "description": "Suite Marchand de biens : Projection de rénovation (/projection-renovation, génération d'une projection visuelle d'une pièce rénovée par IA générative à partir de photos). Emballage pur : connecte le serveur MCP distant déjà en ligne (adapters/mcp_remote/server.py sur Railway, partagé avec les autres suites) et charge le skill via le mécanisme Plugins de Claude.ai.",
-  "version": "0.1.0",
+  "description": "Suite Marchand de biens : Projection de rénovation (/projection-renovation, génération d'une projection visuelle d'une pièce rénovée par IA générative à partir de photos, avec un workflow optionnel de placement précis par grille + masque). Emballage pur : connecte le serveur MCP distant déjà en ligne (adapters/mcp_remote/server.py sur Railway, partagé avec les autres suites) et charge le skill via le mécanisme Plugins de Claude.ai.",
+  "version": "0.2.0",
   "author": {
     "name": "Hugo Esposito Farese",
     "email": "hugo.esposito.farese.pro@gmail.com"
