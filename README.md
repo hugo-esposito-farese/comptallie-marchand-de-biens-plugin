@@ -8,13 +8,16 @@ Même principe que `comptallie-immobilier-plugin` et
 
 **Un agent disponible** : `projection-renovation` (`/projection-renovation`
 — génère une projection visuelle d'une pièce rénovée par IA générative à
-partir de photos de la pièce, de photos d'objets de référence, et d'un plan
-annoté indiquant où les placer). Cf. `Comptallie_MCP/CLAUDE.md`, section
-dédiée "Marchand de biens", pour le détail complet — y compris la rupture
-avec le principe économique habituel de Comptallie (cette suite déclenche
-une inférence tierce payante, fal.ai, sur un budget partagé entre tous les
-clients) et la limite honnêtement assumée du placement des objets
-(expérimental, jamais garanti précis).
+partir de photos de la pièce et de photos d'objets de référence, chacun
+positionné par une description textuelle précise plutôt que par un plan
+annoté — cf. section "Marchand de biens" de `Comptallie_MCP/CLAUDE.md`,
+2026-09-15, sur les flèches/texte qu'un plan annoté fait recopier
+littéralement par ce type de modèle). Cf. `Comptallie_MCP/CLAUDE.md`,
+section dédiée "Marchand de biens", pour le détail complet — y compris la
+rupture avec le principe économique habituel de Comptallie (cette suite
+déclenche une inférence tierce payante, fal.ai, sans garde-fou budgétaire
+dans ce premier MVP) et la limite honnêtement assumée du placement des
+objets (expérimental, jamais garanti précis).
 
 Il ne contient **aucune logique métier** : uniquement
 `.claude-plugin/marketplace.json` et `adapters/claude_plugin/`
