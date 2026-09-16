@@ -12,17 +12,21 @@ partir de photos de la pièce et de photos d'objets de référence, chacun
 positionné par une description textuelle précise plutôt que par un plan
 annoté — cf. section "Marchand de biens" de `Comptallie_MCP/CLAUDE.md`,
 2026-09-15, sur les flèches/texte qu'un plan annoté fait recopier
-littéralement par ce type de modèle). Depuis le 2026-09-15ter, un second
+littéralement par ce type de modèle). Depuis le 2026-09-16, un second
 workflow optionnel (mêmes tools sous-jacents `generer_grille_renovation` +
-`generer_projection_renovation_inpainting`) permet un placement plus précis
-par grille + masque géométrique, quand une simple description textuelle ne
-suffit pas — cf. section dédiée du `SKILL.md`. Cf. `Comptallie_MCP/CLAUDE.md`,
+`generer_projection_renovation_grille`) permet un placement plus précis par
+grille + collage de repère (un seul appel fal.ai, sur le même modèle que le
+workflow par défaut), quand une simple description textuelle ne suffit pas
+— cf. section dédiée du `SKILL.md`. Remplace une première version
+(2026-09-15ter, masque + inpainting séquentiel) retirée après un test réel
+ayant donné un résultat nettement dégradé. Cf. `Comptallie_MCP/CLAUDE.md`,
 section dédiée "Marchand de biens", pour le détail complet — y compris la
 rupture avec le principe économique habituel de Comptallie (cette suite
 déclenche une inférence tierce payante, fal.ai, sans garde-fou budgétaire
 dans ce premier MVP) et la limite honnêtement assumée du placement des
 objets (expérimental, jamais garanti précis, y compris avec le workflow par
-grille : le masque contraint la zone, pas le rendu génératif à l'intérieur).
+grille : le collage de repère guide la zone, pas le rendu génératif à
+l'intérieur).
 
 Il ne contient **aucune logique métier** : uniquement
 `.claude-plugin/marketplace.json` et `adapters/claude_plugin/`

@@ -30,11 +30,14 @@ réunis et confirmés, jamais pour un simple test.
 AUCUNE FICHE ENTITÉ, AUCUN ONBOARDING RELATIONNEL pour cette suite — ne
 demande jamais d'informations générales sur l'activité du client.
 
-DEUXIÈME WORKFLOW (2026-09-15ter) : `generer_grille_renovation` +
-`generer_projection_renovation_inpainting` — placement par grille/masque,
-plus précis géométriquement que le workflow prompt-texte ci-dessous (cf.
-section dédiée). Les deux workflows cohabitent, le premier
-(`generer_projection_renovation`) reste inchangé.
+DEUXIÈME WORKFLOW (2026-09-16) : `generer_grille_renovation` +
+`generer_projection_renovation_grille` — placement par grille + collage de
+repère, plus précis géométriquement que le workflow prompt-texte ci-dessous
+(cf. section dédiée). Un seul appel fal.ai (pas de séquence), sur le même
+modèle que le workflow par défaut. Remplace une première version
+(2026-09-15ter, masque + inpainting séquentiel) retirée après un test réel
+ayant donné un résultat nettement dégradé. Les deux workflows cohabitent, le
+premier (`generer_projection_renovation`) reste inchangé.
 -->
 
 ## Rôle
@@ -48,7 +51,7 @@ freelance. Deux façons de procéder (cf. sections dédiées ci-dessous) :
 - **Positions précises sur une grille** (quand l'utilisateur veut un
   placement plus rigoureux, ex. "je veux que ce soit vraiment dans ce coin
   précis") — workflow "Placement précis par grille" ci-dessous, avec
-  `generer_grille_renovation` + `generer_projection_renovation_inpainting`.
+  `generer_grille_renovation` + `generer_projection_renovation_grille`.
   Propose cette option si l'utilisateur exprime une insatisfaction sur le
   placement obtenu avec le premier workflow, ou s'il demande explicitement
   un placement plus précis.
@@ -149,6 +152,12 @@ Le modèle de génération n'accepte que 4 images au total.
 
 Utilise ce workflow à la place du précédent quand l'utilisateur veut un
 placement géométrique plus rigoureux qu'une simple description textuelle.
+Un seul appel fal.ai (jamais une séquence), sur le même modèle que le
+workflow par défaut : chaque objet est d'abord collé grossièrement dans sa
+zone de grille sur la photo de la pièce (un repère visuel de position/
+échelle), puis cette composite ET la vraie photo de chaque objet sont
+envoyées au modèle avec un prompt qui explique que les zones collées sont à
+remplacer par un rendu photoréaliste.
 
 1. Televerse d'abord la photo de la pièce vide (`televerser_image_renovation`
    si c'est un fichier joint local, avec le même pré-traitement obligatoire
@@ -161,28 +170,25 @@ placement géométrique plus rigoureux qu'une simple description textuelle.
    grille.
 3. Televerse chaque photo d'objet de référence séparément si besoin (même
    pré-traitement).
-4. Appelle `generer_projection_renovation_inpainting` avec `image_url` (la
+4. Appelle `generer_projection_renovation_grille` avec `image_url` (la
    photo de la pièce, PAS la grille annotée — celle-ci ne sert qu'à
    l'utilisateur pour indiquer une position) et `objects` : une liste de
-   `{"name", "reference_image_url", "position"}` pour chaque objet, dans
-   l'ordre où tu veux qu'ils soient ajoutés (chaque objet est intégré l'un
-   après l'autre sur le résultat du précédent, jamais tous en une fois).
+   `{"name", "reference_image_url", "position"}` pour chaque objet — au
+   maximum 3 objets par appel (1 composite + une photo par objet, 4 images
+   max pour le modèle). Si plus de 3 objets, traite-les en plusieurs appels,
+   chacun utilisant le résultat du précédent comme nouvelle `image_url`.
 5. Si `donnees_manquantes` est retourné : demande l'élément manquant.
-6. Si `success` est faux : un objet a échoué (`failed_object`, `error` avec
-   un `code` — par exemple une position mal formée ou une image de référence
-   manquante). Explique simplement ce qui doit être corrigé pour cet objet
-   précis (jamais un message technique brut), et propose de reprendre à
-   partir de cet objet sans redemander les objets déjà réussis
-   (`completed_objects`).
-7. Si `success` est vrai : présente `final_image_url` avec la même honnêteté
-   que le workflow par défaut — une PREMIÈRE PROJECTION à valider
-   visuellement, jamais un placement garanti pixel-parfait (le masque
-   contraint la ZONE, pas le rendu à l'intérieur de cette zone, qui reste
-   génératif).
-8. **Même absence de garde-fou budgétaire, aggravée ici** : chaque objet
-   traité déclenche un appel fal.ai payant DISTINCT (un workflow à 3 objets
-   coûte 3 générations, pas une seule) — n'utilise ce workflow qu'une fois
-   les éléments réellement réunis et confirmés.
+6. Si `generation_effectuee` est faux : un `code` structuré identifie le
+   problème (position mal formée, image de référence manquante, trop
+   d'images...) et, le cas échéant, `objet` précise lequel. Explique
+   simplement ce qui doit être corrigé (jamais un message technique brut).
+7. Si `generation_effectuee` est vrai : présente le résultat avec la même
+   honnêteté que le workflow par défaut — une PREMIÈRE PROJECTION à valider
+   visuellement, jamais un placement garanti pixel-parfait (le collage guide
+   la ZONE, pas le rendu à l'intérieur de cette zone, qui reste génératif).
+8. **Pas de garde-fou budgétaire** : chaque appel déclenche une génération
+   fal.ai payante — n'utilise ce workflow qu'une fois les éléments
+   réellement réunis et confirmés.
 
 ## Séquence
 
@@ -237,5 +243,5 @@ placement géométrique plus rigoureux qu'une simple description textuelle.
   demande-la toujours explicitement à l'utilisateur après lui avoir montré
   la grille annotée.
 - N'utilise jamais la grille annotée elle-même comme `image_url` de
-  `generer_projection_renovation_inpainting` — uniquement la photo
-  d'origine, sans annotation.
+  `generer_projection_renovation_grille` — uniquement la photo d'origine,
+  sans annotation.
